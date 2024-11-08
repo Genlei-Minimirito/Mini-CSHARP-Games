@@ -1,0 +1,129 @@
+using System;
+
+namespace DungeonCrawler
+{
+    class Program
+    {
+        static Random random = new Random();
+
+        // Game entities
+        static int playerHealth = 100;
+        static int playerAttack = 15;
+        static int playerLevel = 1;
+
+        static int enemyHealth;
+        static int enemyAttack;
+
+        static bool isGameRunning = true;
+
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Welcome to the Dungeon Crawler!");
+
+            while (isGameRunning)
+            {
+                Console.WriteLine("\n--- Dungeon Level: " + playerLevel + " ---");
+                Console.WriteLine("Player Health: " + playerHealth);
+
+                // Randomly encounter an enemy
+                if (random.Next(0, 2) == 1) // 50% chance of encounter
+                {
+                    EncounterEnemy();
+                }
+                else
+                {
+                    Console.WriteLine("No enemies encountered. You proceed forward.");
+                }
+
+                Console.WriteLine("Choose your action:");
+                Console.WriteLine("1. Move Forward");
+                Console.WriteLine("2. Check Status");
+                Console.WriteLine("3. Exit Dungeon");
+
+                string input = Console.ReadLine();
+
+                switch (input)
+                {
+                    case "1":
+                        playerLevel++;
+                        break;
+                    case "2":
+                        CheckStatus();
+                        break;
+                    case "3":
+                        ExitGame();
+                        break;
+                    default:
+                        Console.WriteLine("Invalid input, try again.");
+                        break;
+                }
+
+                if (playerHealth <= 0)
+                {
+                    Console.WriteLine("You have fallen in the dungeon... Game Over.");
+                    isGameRunning = false;
+                }
+            }
+        }
+
+        static void EncounterEnemy()
+        {
+            enemyHealth = random.Next(20, 50);
+            enemyAttack = random.Next(5, 15);
+
+            Console.WriteLine("\nAn enemy appears with " + enemyHealth + " health and " + enemyAttack + " attack!");
+
+            while (enemyHealth > 0 && playerHealth > 0)
+            {
+                Console.WriteLine("\nChoose your action:");
+                Console.WriteLine("1. Attack");
+                Console.WriteLine("2. Flee");
+
+                string input = Console.ReadLine();
+
+                if (input == "1")
+                {
+                    // Player attacks enemy
+                    int playerDamage = random.Next(playerAttack - 5, playerAttack + 5);
+                    enemyHealth -= playerDamage;
+                    Console.WriteLine("You attack the enemy for " + playerDamage + " damage.");
+
+                    if (enemyHealth > 0)
+                    {
+                        // Enemy attacks player
+                        int enemyDamage = random.Next(enemyAttack - 2, enemyAttack + 2);
+                        playerHealth -= enemyDamage;
+                        Console.WriteLine("The enemy attacks you for " + enemyDamage + " damage.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("You defeated the enemy!");
+                    }
+                }
+                else if (input == "2")
+                {
+                    Console.WriteLine("You flee from the enemy.");
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid action, try again.");
+                }
+            }
+        }
+
+        static void CheckStatus()
+        {
+            Console.WriteLine("\n--- Player Status ---");
+            Console.WriteLine("Health: " + playerHealth);
+            Console.WriteLine("Attack: " + playerAttack);
+            Console.WriteLine("Level: " + playerLevel);
+        }
+
+        static void ExitGame()
+        {
+            Console.WriteLine("You have exited the dungeon. Thanks for playing!");
+            isGameRunning = false;
+        }
+    }
+}
