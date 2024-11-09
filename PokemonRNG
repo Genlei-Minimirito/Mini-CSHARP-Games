@@ -101,6 +101,7 @@ namespace PokemonRNGGame
             { "Ceruledge", "Rare" },
             { "Koraidon", "Legendary" },
             { "Miraidon", "Legendary" }
+
         };
 
         static Dictionary<string, int> playerCollection = new Dictionary<string, int>();
@@ -114,11 +115,11 @@ namespace PokemonRNGGame
 
             while (isPlaying)
             {
-                Console.WriteLine("\nChoose an action:");
-                Console.WriteLine("1. Attempt to Catch a Pokémon");
-                Console.WriteLine("2. View Collection");
-                Console.WriteLine("3. Exit Game");
-
+                Console.WriteLine("\nChoose an action:", Console.ForegroundColor = ConsoleColor.Yellow);
+                Console.WriteLine("1. Attempt to Catch a Pokémon", Console.ForegroundColor = ConsoleColor.Yellow);
+                Console.WriteLine("2. View Collection", Console.ForegroundColor = ConsoleColor.Yellow);
+                Console.WriteLine("3. Exit Game", Console.ForegroundColor = ConsoleColor.Yellow);
+               
                 string input = Console.ReadLine();
 
                 switch (input)
@@ -127,14 +128,19 @@ namespace PokemonRNGGame
                         AttemptCatch();
                         break;
                     case "2":
+                        Console.ForegroundColor = ConsoleColor.White;
                         ViewCollection();
+                        
                         break;
                     case "3":
+                        Console.ForegroundColor = ConsoleColor.Gray;
                         Console.WriteLine("Thank you for playing!");
+                       
                         isPlaying = false;
                         break;
                     default:
-                        Console.WriteLine("Invalid input. Please try again.");
+                        Console.WriteLine("Invalid input. Please try again.", Console.ForegroundColor = ConsoleColor.Red);
+                       
                         break;
                 }
             }
@@ -145,7 +151,7 @@ namespace PokemonRNGGame
             string encounteredPokemon = GetRandomPokemon();
             string rarity = pokemonList[encounteredPokemon];
 
-            Console.WriteLine($"\nA wild {encounteredPokemon} appeared! (Rarity: {rarity})");
+            Console.WriteLine($"\nA wild {encounteredPokemon} appeared! (Rarity: {rarity})", Console.ForegroundColor = ConsoleColor.White);
 
             // Simple catch probability based on rarity
             bool caught = false;
@@ -153,19 +159,24 @@ namespace PokemonRNGGame
             {
                 case "Common":
                     caught = random.Next(0, 100) < 70; // 70% chance
+                    Console.ForegroundColor = ConsoleColor.White;
+
                     break;
                 case "Rare":
                     caught = random.Next(0, 100) < 30; // 30% chance
+                    Console.ForegroundColor = ConsoleColor.Blue;
+
                     break;
                 case "Legendary":
                     caught = random.Next(0, 100) < 10; // 10% chance
+                    Console.ForegroundColor = ConsoleColor.DarkMagenta;
                     break;
             }
 
             if (caught)
             {
-                Console.WriteLine($"You caught {encounteredPokemon}!");
-
+                Console.WriteLine($"You caught {encounteredPokemon}!", Console.ForegroundColor = ConsoleColor.Green);
+                
                 // Add to player collection
                 if (playerCollection.ContainsKey(encounteredPokemon))
                 {
@@ -178,10 +189,12 @@ namespace PokemonRNGGame
             }
             else
             {
-                Console.WriteLine($"{encounteredPokemon} escaped!");
+                Console.WriteLine($"{encounteredPokemon} escaped!", Console.ForegroundColor = ConsoleColor.Red);
+                
             }
         }
-        
+
+
 
         static string GetRandomPokemon()
         {
@@ -189,7 +202,9 @@ namespace PokemonRNGGame
             string selectedPokemon = new List<string>(pokemonList.Keys)[index];
             return selectedPokemon;
         }
-        
+
+
+
 
         static void ViewCollection()
         {
@@ -207,26 +222,8 @@ namespace PokemonRNGGame
                 }
             }
         }
-        static void SetConsoleColorByRarity(string rarity)
-        {
-            switch (rarity)
-            {
-                case "Common":
-                    Console.ForegroundColor = ConsoleColor.White;
-                    break;
-                case "Rare":
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    break;
-                case "Legendary":
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    break;
-                default:
-                    Console.ResetColor();
-                    break;
-            }
-        
-    }  
 
-                                          
-}
+    }
+
+
 }
